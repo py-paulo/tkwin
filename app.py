@@ -5,32 +5,30 @@ import tkinter as tk
 from tkinter import ttk
 
 
-def get_random_position(size_box_x=0, size_box_y=0):
-    x = random.randint(5, 600 - size_box_x)
-    y = random.randint(5, 400 - size_box_y)
+window_width = 600
+window_height = 400
+
+
+def get_random_position(last_position_x, last_position_y, size_x, size_y):
+    x = random.randint(5, window_width - size_x)
+    y = random.randint(5, window_height - size_y)
+
+    while abs(last_position_x - x) < 100:
+        x = random.randint(5, window_width - size_x)
+    while abs(last_position_y - y) < 50:
+        y = random.randint(5, window_height - size_x)
+
     return x, y
 
 
-def callback_function(args):
-    print('Button Clicked!', args)
-
-
-def return_pressed(event):
-    print('Return key pressed.', event)
-
-
-def return_hover(event):
-    x, y = get_random_position(size_box_x=btn.winfo_width(), size_box_y=btn.winfo_height())
+def return_hover(_):
+    x, y = get_random_position(btn.winfo_x(), btn.winfo_y(), btn.winfo_width(), btn.winfo_height())
     btn.place(x=x, y=y)
-    print('Hover button', event)
 
 
 root = tk.Tk()
 
 root.title('Tk Window Demo')
-
-window_width = 600
-window_height = 400
 
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
@@ -44,9 +42,8 @@ root.attributes('-topmost', 1)
 root.iconbitmap('./assets/skull.ico')
 
 btn = ttk.Button()
-btn.config(text='ClickMe', command=lambda: callback_function(btn.winfo_screenheight()))
-root.bind('<Return>', return_pressed)
-root.bind('<Enter>', return_hover, add='+')
+btn.config(text='ClickMe', padding='3 3 3 3')
+root.bind('<Enter>', return_hover)
 
 btn.pack()
 
